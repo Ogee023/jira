@@ -26,12 +26,12 @@ const FullPage = styled.div`
 `
 
 export const FullPageLoading = () => <FullPage>
-  <Spin size="large"/>
+  <Spin size="large" />
 </FullPage>
 
 export const FullPageErrorFallback = ({ error }: { error: Error | null }) => <FullPage>
   <DevTools />
-  <ErrorBox error={error}/>
+  <ErrorBox error={error} />
 </FullPage>
 
 // 类型守卫
@@ -46,4 +46,11 @@ export const ErrorBox = ({ error }: { error: unknown }) => {
 
 export const ButtonNoPadding = styled(Button)`
   padding: 0
+`
+
+export const ScreenContainer = styled.div`
+  padding: 3.2rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 `
