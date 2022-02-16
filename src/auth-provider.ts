@@ -1,4 +1,4 @@
-import { User } from "screens/project-list/search-panel"
+import { User } from "types/user"
 
 const localStorageKey = '__auth_provider_token__'
 
@@ -8,7 +8,7 @@ export const getToken = () => window.localStorage.getItem(localStorageKey)
 
 export const handleUserResponse = ({ user }: { user: User }) => {
   window.localStorage.setItem(localStorageKey, user.token || '')
-  return user 
+  return user
 }
 
 export const login = (data: { username: string, password: string }) => {
