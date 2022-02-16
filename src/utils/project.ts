@@ -18,7 +18,6 @@ export const useEditProject = (queryKey: QueryKey) => {
     }),
     useEditConfig(queryKey)
   )
-
 }
 
 export const useAddProject = (queryKey: QueryKey) => {
