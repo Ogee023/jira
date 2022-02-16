@@ -6,7 +6,8 @@ import { cleanObject } from "utils"
  * 返回页面url中，指定键的参数值
  */
 export const useUrlQueryParam = <K extends string>(keys: K[]) => {
-  const [searchParams, setSearchParam] = useSearchParams()
+  const [searchParams] = useSearchParams()
+  const setSearchParam = useSetUrlSearchParam()
   return [
     useMemo(
       () => keys.reduce((prev, key) => {
@@ -16,8 +17,16 @@ export const useUrlQueryParam = <K extends string>(keys: K[]) => {
       [searchParams]
     ),
     (params: Partial<{ [key in K]: unknown }>) => {
-      const o = cleanObject({ ...Object.fromEntries(searchParams), ...params }) as URLSearchParamsInit
-      return setSearchParam(o)
+      return setSearchParam(params)
     }
   ] as const
+}
+
+export const useSetUrlSearchParam = () => {
+  const [searchParams, setSearchParam] = useSearchParams()
+
+  return (params: { [key in string]: unknown }) => {
+    const o = cleanObject({ ...Object.fromEntries(searchParams), ...params }) as URLSearchParamsInit
+    return setSearchParam(o)
+  }
 }
