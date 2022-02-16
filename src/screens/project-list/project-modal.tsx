@@ -5,16 +5,16 @@ import { ErrorBox } from "components/lib"
 import { UserSelect } from "components/user-select"
 import { useEffect } from "react"
 import { useAddProject, useEditProject } from "utils/project"
-import { useProjectModal } from "./util"
+import { useProjectModal, useProjectsQueryKey } from "./util"
 
 export const ProjectModal = () => {
   const { projectModalOpen, close, editingProject, isLoading } = useProjectModal()
   const useMutateProject = editingProject ? useEditProject : useAddProject
 
-  const { mutateAsync, error, isLoading: mutateLoading } = useMutateProject()
+  const { mutateAsync, error, isLoading: mutateLoading } = useMutateProject(useProjectsQueryKey())
   const [form] = useForm()
   const onFinish = (values: any) => {
-    mutateAsync({...editingProject, ...values}).then(() => {
+    mutateAsync({ ...editingProject, ...values }).then(() => {
       form.resetFields()
       close()
     })
@@ -53,7 +53,7 @@ export const ProjectModal = () => {
               <UserSelect defaultOptionName="负责人" />
             </Form.Item>
 
-            <Form.Item style={{textAlign: 'right'}}>
+            <Form.Item style={{ textAlign: 'right' }}>
               <Button loading={mutateLoading} type="primary" htmlType="submit">
                 提交
               </Button>

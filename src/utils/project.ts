@@ -1,36 +1,47 @@
-import { useMutation, useQuery, useQueryClient } from "react-query"
+import { QueryKey, useMutation, useQuery, useQueryClient } from "react-query"
 import { Project } from "screens/project-list/list"
+import { useProjectsSearchParams } from "screens/project-list/util"
 import { useHttp } from "./http"
+import { useAddConfig, useDeleteConfig, useEditConfig } from "./use-optimistic-options"
 
 export const useProjects = (param?: Partial<Project>) => {
   const client = useHttp()
-  
-  return useQuery<Project[]>(['projects', param], () => client('projects', {data: param}))
+
+  return useQuery<Project[]>(['projects', param], () => client('projects', { data: param }))
 }
 
-export const useEditProject = () => {
+export const useEditProject = (queryKey: QueryKey) => {
   const client = useHttp()
-  const queryClient = useQueryClient()
-  return useMutation((params: Partial<Project>) => client(`projects/${params.id}`, {
-    method: 'PATCH',
-    data: params
-  }), {
-    onSuccess: () => queryClient.invalidateQueries('projects')
-  })
-  
+  return useMutation(
+    (params: Partial<Project>) => client(`projects/${params.id}`, {
+      method: 'PATCH',
+      data: params
+    }),
+    useEditConfig(queryKey)
+  )
+
 }
 
-export const useAddProject = () => {
+export const useAddProject = (queryKey: QueryKey) => {
   const clinet = useHttp()
-  const queryClient = useQueryClient()
 
   return useMutation(
     (params: Partial<Project>) => clinet(`projects`, {
       data: params,
       method: 'POST'
-    }), {
-      onSuccess: () => queryClient.invalidateQueries('projects')
-    }
+    }),
+    useAddConfig(queryKey)
+  )
+}
+
+export const useDeleteProject = (queryKey: QueryKey) => {
+  const clinet = useHttp()
+
+  return useMutation(
+    ({ id }: { id: number }) => clinet(`projects/${id}`, {
+      method: 'DELETE'
+    }),
+    useDeleteConfig(queryKey)
   )
 }
 
