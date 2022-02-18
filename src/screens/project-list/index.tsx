@@ -6,6 +6,7 @@ import { useUsers } from "utils/user"
 import { Row } from "antd"
 import { useProjectModal, useProjectsSearchParams } from "./util"
 import { ButtonNoPadding, ErrorBox, ScreenContainer } from "components/lib"
+import { Profiler } from "components/profiler"
 
 // 基本类型和组件状态可以放到依赖里，非组件状态的对象绝不可以放到依赖里
 
@@ -18,20 +19,22 @@ export const ProjectListScreen = () => {
   const { isLoading, error, data: list } = useProjects(useDebounce(param, 200))
   const { data: users } = useUsers()
 
-  return <ScreenContainer>
-    <Row justify="space-between" align="middle">
-      <h1>项目列表</h1>
-      <ButtonNoPadding
-        onClick={open}
-        type="link"
-      >
-        创建项目
-      </ButtonNoPadding>
-    </Row>
-    <SearchPanel users={users || []} param={param} setParam={setParam} />
-    <ErrorBox error={error} />
-    <List loading={isLoading} users={users || []} dataSource={list || []} />
-  </ScreenContainer>
+  return <Profiler id="项目列表">
+    <ScreenContainer>
+      <Row justify="space-between" align="middle">
+        <h1>项目列表</h1>
+        <ButtonNoPadding
+          onClick={open}
+          type="link"
+        >
+          创建项目
+        </ButtonNoPadding>
+      </Row>
+      <SearchPanel users={users || []} param={param} setParam={setParam} />
+      <ErrorBox error={error} />
+      <List loading={isLoading} users={users || []} dataSource={list || []} />
+    </ScreenContainer>
+  </Profiler>
 }
 
 ProjectListScreen.whyDidYouRender = false

@@ -7,12 +7,15 @@ import { loadServer, DevTools } from 'jira-dev-tool';
 // jira-dev-tool 之后引入，覆盖
 import 'antd/dist/antd.less'
 import { AppProviders } from 'context';
+import { Profiler } from 'components/profiler';
 
 loadServer(() => ReactDOM.render(
-  <AppProviders>
-    <DevTools />
-    <App />
-  </AppProviders>,
+  <Profiler id='Root App' phases={['mount']}>
+    <AppProviders>
+      <DevTools />
+      <App />
+    </AppProviders>
+  </Profiler>,
   document.getElementById('root')
 ))
 
