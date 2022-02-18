@@ -5,7 +5,10 @@ export const isFalsy = (value: unknown) => value === 0 ? false : !value
 export const isVoid = (value: unknown) => value === undefined || value === null || value === ''
 
 // 在一个函数里面，改变传入的对象本身是不好的
-export const cleanObject = (object: { [key: string]: unknown }) => {
+export const cleanObject = (object?: { [key: string]: unknown }) => {
+  if (!object) {
+    return {}
+  }
   const result = { ...object }
   Object.keys(result).forEach(key => {
     const value = result[key]
@@ -41,7 +44,7 @@ export const useDebounce = <V>(value: V, delay?: number) => {
 export const useArray = <T>(initialArray: T[]) => {
   const [value, setValue] = useState(initialArray)
   return {
-    value, 
+    value,
     setValue,
     add: (item: T) => setValue([...value, item]),
     clear: () => setValue([]),
